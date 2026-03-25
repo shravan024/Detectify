@@ -1,0 +1,101 @@
+﻿  Γû▓ Next.js 15.0.0
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+
+./src/auth.config.ts
+1:31  Warning: 'Session' is defined but never used.  @typescript-eslint/no-unused-vars
+1:40  Warning: 'User' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ImageDetector.tsx
+3:27  Warning: 'useEffect' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/9) ...
+   Generating static pages (2/9) 
+   Generating static pages (4/9) 
+   Generating static pages (6/9) 
+ Γ£ô Generating static pages (9/9)
+   Finalizing page optimization ...
+   Collecting build traces ...
+node.exe : Error: 
+ENOENT: no such file 
+or directory, open 'C:\
+S1-25\files\ai-detector
+\.next\server\app\_not-
+found\page.js.nft.json'
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (Error: ENOENT   
+ : ...ge.js.nft.jso    
+n':String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+    at async open (node
+:internal/fs/promises:6
+37:25)
+    at async 
+Object.readFile (node:i
+nternal/fs/promises:126
+9:14)
+    at async C:\S1-25\f
+iles\ai-detector\node_m
+odules\next\dist\build\
+collect-build-traces.js
+:440:50
+    at async 
+Promise.all (index 0)
+    at async C:\S1-25\f
+iles\ai-detector\node_m
+odules\next\dist\build\
+collect-build-traces.js
+:419:13
+    at async 
+Span.traceAsyncFn (C:\S
+1-25\files\ai-detector\
+node_modules\next\dist\
+trace\trace.js:157:20)
+    at async 
+collectBuildTraces (C:\
+S1-25\files\ai-detector
+\node_modules\next\dist
+\build\collect-build-tr
+aces.js:164:5)
+    at async C:\S1-25\f
+iles\ai-detector\node_m
+odules\next\dist\build\
+index.js:2369:13
+    at async 
+Span.traceAsyncFn (C:\S
+1-25\files\ai-detector\
+node_modules\next\dist\
+trace\trace.js:157:20)
+    at async build (C:\
+S1-25\files\ai-detector
+\node_modules\next\dist
+\build\index.js:346:9) 
+{
+  errno: -4058,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'C:\\S1-25\\fil
+es\\ai-detector\\.next\
+\server\\app\\_not-foun
+d\\page.js.nft.json'
+}

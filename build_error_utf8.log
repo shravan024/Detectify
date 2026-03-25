@@ -1,0 +1,79 @@
+﻿
+> ai-detector@0.1.0 build
+> next build
+
+  Γû▓ Next.js 15.0.0
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Linting and checking validity of types ...
+node.exe : Failed to compile.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo          : Not 
+   Specified: (Failed to compile  
+  .:String) [], RemoteException
+    + FullyQualifiedErrorId : Nat 
+   iveCommandError
+ 
+
+./src/components/ImageDetector.tsx
+:76:11
+Type error: Type 'ZeroShotImageCla
+ssificationPipeline' is not 
+assignable to type 'LayersModel | 
+CLIPModel | null'.
+  Type 'ZeroShotImageClassificatio
+nPipeline' is not assignable to 
+type 'CLIPModel'.
+    Type 'Promise<ZeroShotImageCla
+ssificationOutput[] | ZeroShotImag
+eClassificationOutput[][]>' is 
+not assignable to type 
+'Promise<CLIPOutput>'.
+      Type 'ZeroShotImageClassific
+ationOutput[] | ZeroShotImageClass
+ificationOutput[][]' is not 
+assignable to type 'CLIPOutput'.
+        Type 'ZeroShotImageClassif
+icationOutput[][]' is not 
+assignable to type '{ label: 
+string; score: number; }[]'.
+          Type 'ZeroShotImageClass
+ificationOutput[]' is missing the 
+following properties from type '{ 
+label: string; score: number; }': 
+label, score
+
+[0m [90m 74 |[39m         
+setModelStatus([32m'Initializing 
+Proprietary CLIP Engine... Global 
+Analysis 
+enabled.'[39m)[33m;[39m[0m
+[0m [90m 75 |[39m         
+[36mtry[39m {[0m
+[0m[31m[1m>[22m[39m[90m 76 
+|[39m           activeModel 
+[33m=[39m [36mawait[39m pipeli
+ne([32m'zero-shot-image-classific
+ation'[39m[33m,[39m [32m'Xenov
+a/clip-vit-base-patch32'[39m)[33
+m;[39m[0m
+[0m [90m    |[39m           
+[31m[1m^[22m[39m[0m
+[0m [90m 77 |[39m           
+setModel(() [33m=>[39m 
+activeModel)[33m;[39m[0m
+[0m [90m 78 |[39m           
+setModelStatus([32m'Vision 
+Transformer Network 
+Ready.'[39m)[33m;[39m[0m
+[0m [90m 79 |[39m         } 
+[36mcatch[39m (err) {[0m
