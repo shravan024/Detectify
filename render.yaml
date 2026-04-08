@@ -1,0 +1,37 @@
+services:
+  # 1. Python Backend API
+  - type: web
+    name: detectify-api
+    runtime: python
+    rootDir: api
+    buildStep: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT main:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
+
+  # 2. Next.js Frontend
+  - type: web
+    name: detectify-web
+    runtime: node
+    buildStep: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          type: web
+          name: detectify-api
+          property: host
+        # Note: We append the port and path later in the code or here
+        # For simplicity, we'll manually configure the full URL in the dashboard if needed
+        # but internal networking allows: http://detectify-api:10000/predict
+      - key: MONGODB_URI
+        sync: false
+      - key: NEXTAUTH_SECRET
+        sync: false
+      - key: NEXTAUTH_URL
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false

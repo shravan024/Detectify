@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Proxy to Flask backend
-    const backendUrl = 'http://localhost:5001/predict';
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:5001/predict';
     const backendFormData = new FormData();
     backendFormData.append('image', image);
 
