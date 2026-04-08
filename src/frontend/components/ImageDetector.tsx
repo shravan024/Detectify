@@ -191,8 +191,7 @@ export default function ImageDetector() {
       clearInterval(progressInterval);
       setProgress(100);
 
-        try {
-        let resData: any = null;
+      try {
         if (modelType === 'M2') {
           const formData = new FormData();
           const response = await fetch(previewUrl);
@@ -203,12 +202,12 @@ export default function ImageDetector() {
           if (!apiResponse.ok) throw new Error('API server unreachable.');
 
           const data = await apiResponse.json();
-          resData = { 
+          setResult({ 
             isAI: data.isAI, 
             confidence: data.confidence,
             certainty: data.certainty,
             engine: data.engine
-          };
+          });
         } else if (modelType === 'M1') {
           const output = await (activeModel as CLIPModel)(previewUrl, ['a real natural photograph', 'an ai generated synthetic image']);
           const results: Record<string, number> = {};
@@ -216,13 +215,9 @@ export default function ImageDetector() {
 
           const isAI = results['an ai generated synthetic image'] > results['a real natural photograph'];
           const confidence = Math.round(Math.max(results['an ai generated synthetic image'], results['a real natural photograph']) * 100);
-          resData = { 
-            isAI, 
-            confidence,
-            certainty: confidence > 80 ? "High" : "Medium",
-            engine: "M1 CLIP"
-          };
+          setResult({ isAI, confidence });
 
+          // Trigger heatmap if we had a local layer model (fallback simulation for now)
           if (model instanceof tf.LayersModel) {
              const hResult = await computeOcclusionHeatmap(model, imageRef.current!, isAI ? 1 : 0);
              if (hResult) {
@@ -231,26 +226,7 @@ export default function ImageDetector() {
              }
           }
         }
-
-        setResult(resData);
         setAnalyzing(false);
-
-        // 📝 Log scan activity to the database
-        try {
-          await fetch('/api/scans', {
-            method: 'POST',
-            body: JSON.stringify({
-              engine: resData.engine || modelType,
-              isAI: resData.isAI,
-              confidence: resData.confidence,
-              certainty: resData.certainty || "N/A",
-              imageUrl: previewUrl 
-            }),
-            headers: { 'Content-Type': 'application/json' }
-          });
-        } catch (logErr) {
-          console.error("Failed to log scan activity:", logErr);
-        }
       } catch (err) {
         console.error('Analysis failed:', err);
         setError('Inference failed. Engine encountered an error.');

@@ -1,7 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
 import type { JWT } from "next-auth/jwt";
-import type { Session } from "next-auth";
-import { NextRequest } from "next/server";
 import Google from "next-auth/providers/google";
 import AzureAD from "next-auth/providers/azure-ad";
 
@@ -32,40 +30,34 @@ export const authConfig = {
     strategy: "jwt",
   },
   callbacks: {
-    authorized({ auth, request }: { auth: Session | null; request: NextRequest }) {
-      const { nextUrl } = request;
+    authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isAdmin = (auth?.user as any)?.role === "admin";
-      const isProtectedRoute = nextUrl.pathname === "/" || nextUrl.pathname.startsWith("/admin");
-      const isAdminRoute = nextUrl.pathname.startsWith("/admin");
-      const isAuthRoute = nextUrl.pathname === "/login" || nextUrl.pathname === "/register";
+      const isProtectedRoute = nextUrl.pathname === '/';
+      const isAuthRoute = nextUrl.pathname === '/login' || nextUrl.pathname === '/register';
 
       if (isProtectedRoute) {
-        if (!isLoggedIn) return false;
-        if (isAdminRoute && !isAdmin) {
-          return Response.redirect(new URL("/", nextUrl));
-        }
-        return true;
+        if (isLoggedIn) return true;
+        return false; // Redirect unauthenticated users to login page
       }
 
       if (isAuthRoute) {
         if (isLoggedIn) {
-          return Response.redirect(new URL("/", nextUrl));
+          return Response.redirect(new URL('/', nextUrl));
         }
       }
       return true;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async session({ session, token }: { session: any; token: JWT }) {
       if (token && session.user) {
         (session.user as { id?: string }).id = token.sub as string;
-        (session.user as any).role = token.role as string;
       }
       return session;
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
         token.sub = user.id;
-        token.role = user.role;
       }
       return token;
     }

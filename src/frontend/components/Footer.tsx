@@ -56,7 +56,7 @@ export default function Footer() {
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-white/30 text-xs text-center md:text-left">
-            © 2026 Detectify Systems. All rights reserved. Not for medical or critical diagnostic use.
+            © 2026 AI Detector Systems. All rights reserved. Not for medical or critical diagnostic use.
           </p>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />

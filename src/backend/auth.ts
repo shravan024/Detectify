@@ -38,7 +38,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
            id: user._id.toString(),
            name: user.name,
            email: user.email,
-           role: user.role,
         };
       }
     }),
@@ -58,35 +57,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             isVerified: true, // OAuth emails are already verified
           });
         }
+        
         return true;
       }
-      return true;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = (user as any).id;
-        token.role = (user as any).role;
-      } else if (token.email) {
-        // For existing tokens (like OAuth sessions that are refreshing)
-        // ensure we have the latest role if user wasn't passed
-        await dbConnect();
-        const dbUser = await User.findOne({ email: token.email });
-        if (dbUser) {
-          token.role = dbUser.role;
-        }
-        // Failsafe override for the main admin
-        if (token.email === "admin@detectify.ai") {
-          token.role = "admin";
-        }
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token && session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).role = token.role as string;
-      }
-      return session;
+      return true; // Credentials signin is handled in authorize
     },
   },
 });

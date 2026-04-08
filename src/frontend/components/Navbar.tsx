@@ -1,20 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { LogOut, User as UserIcon, ShieldCheck, LayoutDashboard } from "lucide-react";
+import { LogOut, User as UserIcon, ShieldCheck } from "lucide-react";
 
 export default function Navbar() {
   const { data: session, status } = useSession();
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (session) {
-      console.log("Current Session User:", session.user);
-    }
-  }, [session]);
 
   // Hide the Navbar entirely on the login and register pages, 
   // as they have their own split-screen branding.
@@ -42,15 +35,6 @@ export default function Navbar() {
               </div>
               <span className="hidden sm:inline text-white/90 font-medium tracking-wide text-xs">{session.user?.name}</span>
             </div>
-            {(session.user as any)?.role === "admin" && (
-              <Link
-                href="/admin"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all text-sm font-bold shadow-[0_0_15px_rgba(37,99,235,0.4)]"
-              >
-                <LayoutDashboard size={16} />
-                <span>ADMIN PANEL</span>
-              </Link>
-            )}
             <button
               onClick={() => signOut()}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all text-sm font-medium border border-white/5 text-white/70 hover:text-white"

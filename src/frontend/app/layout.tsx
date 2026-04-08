@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Detectify | AI Image Detector",
+  title: "AI Image Detector | Real vs AI-Generated Images",
   description: "Advanced technology to identify and differentiate between authentic photographs and AI-generated imagery.",
 };
 

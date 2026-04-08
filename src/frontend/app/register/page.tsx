@@ -78,7 +78,69 @@ export default function RegisterPage() {
     }
   };
 
-  // Social registration handled via credentials only now
+  const handleSocialRegister = async (provider: string) => {
+    setLoading(true);
+    const providerId = provider.toLowerCase() === 'microsoft' ? 'azure-ad' : provider.toLowerCase();
+    
+    try {
+      const csrfToken = await getCsrfToken();
+      
+      const width = 500;
+      const height = 600;
+      const left = (window.innerWidth / 2) - (width / 2);
+      const top = (window.innerHeight / 2) - (height / 2);
+      
+      const popup = window.open(
+        "",
+        "OAuthRegisterPopup",
+        `width=${width},height=${height},top=${top},left=${left},toolbar=no,menubar=no,scrollbars=yes,resizable=yes`
+      );
+
+      if (!popup) {
+        toast.error("Popup blocked", { description: "Please allow popups for this site to sign up." });
+        setLoading(false);
+        return;
+      }
+
+      // Create a form to POST to NextAuth's signin endpoint
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = `/api/auth/signin/${providerId}`;
+      form.target = "OAuthRegisterPopup";
+
+      // Add CSRF token
+      const csrfInput = document.createElement("input");
+      csrfInput.type = "hidden";
+      csrfInput.name = "csrfToken";
+      csrfInput.value = csrfToken || "";
+      form.appendChild(csrfInput);
+
+      // Add Callback URL (redirects here after successful authorization)
+      const callbackInput = document.createElement("input");
+      callbackInput.type = "hidden";
+      callbackInput.name = "callbackUrl";
+      callbackInput.value = window.location.href;
+      form.appendChild(callbackInput);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+
+      // Poll to see if the popup closed
+      const timer = setInterval(() => {
+        if (popup.closed) {
+          clearInterval(timer);
+          setLoading(false);
+          // Reload to register the newly created session
+          window.location.reload(); 
+        }
+      }, 500);
+      
+    } catch {
+      toast.error("OAuth Initialization Failed", { description: "Unable to start the authentication flow." });
+      setLoading(false);
+    }
+  };
 
   // Close popup automatically if it landed back on the register page after success
   useEffect(() => {
@@ -167,7 +229,7 @@ export default function RegisterPage() {
 
         {/* Bottom Content / Copyright */}
         <div className="relative z-10 mt-auto">
-          <p className="text-sm text-white/30 font-medium">© 2026 Detectify Systems. All rights reserved.</p>
+          <p className="text-sm text-white/30 font-medium">© 2026 AI Detector Systems. All rights reserved.</p>
         </div>
       </div>
 
@@ -199,7 +261,42 @@ export default function RegisterPage() {
 
                 {/* Removed inline error rendering */}
 
-                {/* Registration Form */}
+                {/* Social Registers */}
+                <div className="space-y-4 mb-8">
+                  <button 
+                    onClick={() => handleSocialRegister('Google')}
+                    type="button" 
+                    className="w-full flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    <span className="text-sm font-semibold text-white/90 group-hover:text-white">Sign up with Google</span>
+                  </button>
+                  
+                  <button 
+                    onClick={() => handleSocialRegister('Microsoft')}
+                    type="button" 
+                    className="w-full flex items-center justify-center gap-3 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-all group"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 21 21">
+                      <path fill="#f25022" d="M1 1h9v9H1z"/>
+                      <path fill="#00a4ef" d="M1 11h9v9H1z"/>
+                      <path fill="#7fba00" d="M11 1h9v9h-9z"/>
+                      <path fill="#ffb900" d="M11 11h9v9h-9z"/>
+                    </svg>
+                    <span className="text-sm font-semibold text-white/90 group-hover:text-white">Sign up with Microsoft</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="h-px flex-1 bg-white/10" />
+                  <span className="text-xs font-semibold text-white/30 uppercase tracking-widest">OR</span>
+                  <div className="h-px flex-1 bg-white/10" />
+                </div>
 
                 <form onSubmit={handleRegisterInput} className="space-y-5">
                   <div className="space-y-2">
