@@ -1,6 +1,5 @@
 # AI Image Protocol: Forensic Detection Engine
 
-![AI Detection Hero](https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1200&auto=format&fit=crop)
 
 ### 🚀 Overview
 **AI Image Protocol** is a professional-grade forensic analysis platform designed to distinguish between authentic photography and synthetic AI-generated imagery. Featuring a hybrid dual-engine architecture and interactive forensic tools, it provides deep insights into the integrity of digital media.
